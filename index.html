@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>信息熵与三层眼动地形</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <nav id="chapter-nav" class="chapter-nav" aria-label="Chapters"></nav>
+
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn active" data-lang="zh">中文</button>
+      <button type="button" class="lang-btn" data-lang="ja">日本語</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <main id="deck" class="deck">
+    <!-- Slide 01: Problem & Objective (Merged) -->
+    <section class="slide active" data-slide="0" aria-labelledby="s1-title">
+      <div class="slide-head">
+        <div id="s1-kicker" class="kicker"></div>
+        <h1 id="s1-title" class="slide-title"></h1>
+      </div>
+
+      <div class="col-split">
+        <div class="col-block">
+          <div class="sec-head">
+            <h2 id="s1-prob-heading" class="sec-title"></h2>
+            <div class="info-wrap">
+              <button type="button" class="info-btn" data-tip="s1ProbTip" aria-label="Baseline caveat">
+                <i data-lucide="info"></i>
+              </button>
+              <div class="info-popover" role="tooltip"></div>
+            </div>
+          </div>
+
+          <div class="kpi-stack">
+            <div class="kpi-row">
+              <div id="s1-dur-label" class="kpi-label"></div>
+              <div id="s1-dur-val" class="kpi-value"></div>
+              <div id="s1-dur-meta" class="kpi-meta"></div>
+              <p id="s1-dur-note" class="kpi-note"></p>
+            </div>
+            <div class="kpi-row warn">
+              <div id="s1-share-label" class="kpi-label"></div>
+              <div id="s1-share-val" class="kpi-value"></div>
+              <div id="s1-share-meta" class="kpi-meta"></div>
+              <p id="s1-share-note" class="kpi-note"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-block">
+          <div class="sec-head">
+            <h2 id="s1-goal-heading" class="sec-title"></h2>
+            <div class="info-wrap">
+              <button type="button" class="info-btn" data-tip="s1GoalTip" aria-label="Objective boundary">
+                <i data-lucide="info"></i>
+              </button>
+              <div class="info-popover" role="tooltip"></div>
+            </div>
+          </div>
+          <ol id="s1-goal-list" class="goal-steps"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 02: Method -->
+    <section class="slide" data-slide="1" aria-labelledby="s2-title" hidden>
+      <div class="slide-head">
+        <div id="s2-kicker" class="kicker"></div>
+        <h1 id="s2-title" class="slide-title"></h1>
+      </div>
+
+      <div class="col-split">
+        <div class="col-block">
+          <div class="sec-head">
+            <h2 id="s2-macro-heading" class="sec-title"></h2>
+            <div class="info-wrap">
+              <button type="button" class="info-btn" data-tip="s2MacroTip" aria-label="Formula assumption">
+                <i data-lucide="info"></i>
+              </button>
+              <div class="info-popover" role="tooltip"></div>
+            </div>
+          </div>
+          <ul id="s2-macro-list" class="formula-list"></ul>
+        </div>
+
+        <div class="col-block">
+          <div class="sec-head">
+            <h2 id="s2-terrain-heading" class="sec-title"></h2>
+            <div class="info-wrap">
+              <button type="button" class="info-btn" data-tip="s2TerrainTip" aria-label="Terrain note">
+                <i data-lucide="info"></i>
+              </button>
+              <div class="info-popover" role="tooltip"></div>
+            </div>
+          </div>
+          <div id="s2-layer-list" class="layer-steps"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 03: Results · Interactive 3-Layer Terrain -->
+    <section class="slide slide-terrain" data-slide="2" aria-labelledby="s3-title" hidden>
+      <div class="slide-head slide-head-compact">
+        <div>
+          <div id="s3-kicker" class="kicker"></div>
+          <h1 id="s3-title" class="slide-title"></h1>
+        </div>
+        <div class="terrain-actions">
+          <label class="inline-control">
+            <span id="s3-window-label"></span>
+            <select id="terrain-window">
+              <option value="10s"></option>
+              <option value="full"></option>
+            </select>
+          </label>
+          <button type="button" id="terrain-reset" class="action-btn">
+            <i data-lucide="rotate-ccw"></i>
+            <span id="s3-reset-text"></span>
+          </button>
+          <button type="button" id="terrain-save" class="action-btn">
+            <i data-lucide="download"></i>
+            <span id="s3-save-text"></span>
+          </button>
+          <div class="info-wrap">
+            <button type="button" class="info-btn" data-tip="s3TerrainTip" aria-label="Interaction note">
+              <i data-lucide="info"></i>
+            </button>
+            <div class="info-popover" role="tooltip"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="terrain-workbench">
+        <aside class="terrain-sidebar">
+          <div id="s3-samples-title" class="sub-label"></div>
+          <nav id="terrain-samples" class="samples-list"></nav>
+
+          <div class="slider-group">
+            <label class="slider-row">
+              <div><span id="s3-height-label"></span><output id="terrain-height-val">1.0</output></div>
+              <input id="terrain-height" type="range" min="0.4" max="1.6" step="0.1" value="1.0">
+            </label>
+            <label class="slider-row">
+              <div><span id="s3-spacing-label"></span><output id="terrain-spacing-val">1.5</output></div>
+              <input id="terrain-spacing" type="range" min="1.1" max="1.8" step="0.1" value="1.5">
+            </label>
+          </div>
+
+          <div id="terrain-stats" class="stats-grid"></div>
+        </aside>
+
+        <section id="gaze-stage" class="gaze-stage">
+          <canvas id="gaze-scene"></canvas>
+          <div id="s3-stamp" class="stage-stamp"></div>
+        </section>
+
+        <aside class="terrain-legend">
+          <div id="s3-legend-title" class="sub-label"></div>
+
+          <div class="legend-item">
+            <span class="layer-idx">03</span>
+            <div class="legend-body">
+              <div id="s3-layer03-title" class="legend-title"></div>
+              <div id="s3-layer03-desc" class="legend-desc"></div>
+              <div class="scale-bar combined"></div>
+              <div class="scale-range"><span>0</span><span id="terrain-comb-max"></span></div>
+              <div id="peaks-combined" class="peaks-line"></div>
+            </div>
+          </div>
+
+          <div class="legend-item">
+            <span class="layer-idx">02</span>
+            <div class="legend-body">
+              <div id="s3-layer02-title" class="legend-title"></div>
+              <div id="s3-layer02-desc" class="legend-desc"></div>
+              <div class="scale-bar gaze"></div>
+              <div class="scale-range"><span>0</span><span id="terrain-gaze-max"></span></div>
+              <div id="peaks-gaze" class="peaks-line"></div>
+            </div>
+          </div>
+
+          <div class="legend-item">
+            <span class="layer-idx">01</span>
+            <div class="legend-body">
+              <div id="s3-layer01-title" class="legend-title"></div>
+              <div id="s3-layer01-desc" class="legend-desc"></div>
+              <div class="scale-bar info"></div>
+              <div class="scale-range"><span>0</span><span id="terrain-info-max"></span></div>
+              <div id="peaks-info" class="peaks-line"></div>
+            </div>
+          </div>
+
+          <div class="legend-item">
+            <span class="layer-idx">00</span>
+            <div class="legend-body">
+              <div id="s3-layer00-title" class="legend-title"></div>
+              <div id="terrain-stimulus" class="legend-desc"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Slide 04: Discussion & Conclusion -->
+    <section class="slide" data-slide="3" aria-labelledby="s4-title" hidden>
+      <div class="slide-head">
+        <div id="s4-kicker" class="kicker"></div>
+        <h1 id="s4-title" class="slide-title"></h1>
+      </div>
+
+      <div class="col-split">
+        <div class="col-block">
+          <div class="sec-head">
+            <h2 id="s4-chart-heading" class="sec-title"></h2>
+            <div class="info-wrap">
+              <button type="button" class="info-btn" data-tip="s4ChartTip" aria-label="Statistical caveat">
+                <i data-lucide="info"></i>
+              </button>
+              <div class="info-popover" role="tooltip"></div>
+            </div>
+          </div>
+          <div id="s4-chart-legend" class="chart-legend"></div>
+          <div id="s4-paired-chart" class="paired-chart-wrap"></div>
+        </div>
+
+        <div class="col-block">
+          <div class="sec-head">
+            <h2 id="s4-conc-heading" class="sec-title"></h2>
+          </div>
+          <p id="s4-conc-lead" class="conclusion-lead"></p>
+
+          <h3 id="s4-limits-heading" class="sub-label sub-heading"></h3>
+          <ol id="s4-limits-list" class="num-list"></ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./vendor/lucide.js"></script>
+  <script src="./data.bundle.js"></script>
+  <script src="./app.bundle.js"></script>
+</body>
+</html>
